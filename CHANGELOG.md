@@ -1,3 +1,9 @@
+## [0.6.2](https://github.com/okamyuji/kizami/compare/v0.6.1...v0.6.2) (2026-09-12)
+
+### Bug Fixes
+
+- **deps:** bump vitest to 4.1.11 (Dependabot [#66](https://github.com/okamyuji/kizami/issues/66), [#67](https://github.com/okamyuji/kizami/issues/67), [#68](https://github.com/okamyuji/kizami/issues/68)) ([#23](https://github.com/okamyuji/kizami/issues/23)) ([a16778d](https://github.com/okamyuji/kizami/commit/a16778d813fb71ef27a06beb39e6d07f86211702)), closes [#22](https://github.com/okamyuji/kizami/issues/22)
+
 ## [0.6.1](https://github.com/okamyuji/kizami/compare/v0.6.0...v0.6.1) (2026-09-04)
 
 ### Bug Fixes
