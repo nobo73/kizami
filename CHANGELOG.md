@@ -1,3 +1,9 @@
+## [0.6.3](https://github.com/okamyuji/kizami/compare/v0.6.2...v0.6.3) (2026-09-12)
+
+### Bug Fixes
+
+- **deps:** bump sharp to 0.35.4 and js-yaml to 4.3.2 (Dependabot [#69](https://github.com/okamyuji/kizami/issues/69), [#70](https://github.com/okamyuji/kizami/issues/70)) ([#24](https://github.com/okamyuji/kizami/issues/24)) ([3bee159](https://github.com/okamyuji/kizami/commit/3bee1599ce05535ca0c65718fe894f2184fcfb11))
+
 ## [0.6.2](https://github.com/okamyuji/kizami/compare/v0.6.1...v0.6.2) (2026-09-12)
 
 ### Bug Fixes
