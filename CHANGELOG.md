@@ -1,3 +1,11 @@
+## [0.6.4](https://github.com/okamyuji/kizami/compare/v0.6.3...v0.6.4) (2026-09-15)
+
+### Bug Fixes
+
+- **checkpoint:** guard directory fsync so Windows does not abort the commit ([#26](https://github.com/okamyuji/kizami/issues/26)) ([eefaeeb](https://github.com/okamyuji/kizami/commit/eefaeeba09eecae902fec90e9971d355ee965f57))
+- **cli:** call recoverPreparedCheckpoints() at SessionStart ([#28](https://github.com/okamyuji/kizami/issues/28)) ([0fb5631](https://github.com/okamyuji/kizami/commit/0fb5631720fc410a9e5647fa391a524eeba21c17))
+- **recover:** decode Windows project directory names ([#27](https://github.com/okamyuji/kizami/issues/27)) ([577b385](https://github.com/okamyuji/kizami/commit/577b38539b059d7af754c0a5dd15d5fa5f8e230a))
+
 ## [0.6.3](https://github.com/okamyuji/kizami/compare/v0.6.2...v0.6.3) (2026-09-12)
 
 ### Bug Fixes
