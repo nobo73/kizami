@@ -1,3 +1,9 @@
+## [0.7.1](https://github.com/okamyuji/kizami/compare/v0.7.0...v0.7.1) (2026-09-17)
+
+### Bug Fixes
+
+- **recover:** apply storage.projectAliases to recovered sessions ([#32](https://github.com/okamyuji/kizami/issues/32)) ([81902b1](https://github.com/okamyuji/kizami/commit/81902b1c3b55f159b66d5d548f3a6b726167bdf6))
+
 ## [0.7.0](https://github.com/okamyuji/kizami/compare/v0.6.5...v0.7.0) (2026-09-17)
 
 ### Features
