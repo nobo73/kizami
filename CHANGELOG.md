@@ -1,3 +1,9 @@
+## [0.6.5](https://github.com/okamyuji/kizami/compare/v0.6.4...v0.6.5) (2026-09-17)
+
+### Bug Fixes
+
+- **cli:** make search respect config.search.projectScope ([#31](https://github.com/okamyuji/kizami/issues/31)) ([b8e16ab](https://github.com/okamyuji/kizami/commit/b8e16abf0414400e3b0dd5b6c643409ab0005947))
+
 ## [0.6.4](https://github.com/okamyuji/kizami/compare/v0.6.3...v0.6.4) (2026-09-15)
 
 ### Bug Fixes
