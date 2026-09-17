@@ -1,7 +1,8 @@
 import { parseArgs } from 'node:util';
 import * as path from 'node:path';
 import * as fs from 'node:fs';
-import { loadConfig } from '@/config';
+import { loadConfig, applyProjectAlias } from '@/config';
+import type { EngramConfig } from '@/config';
 import { getDatabase } from '@/db/connection';
 import { initializeSchema } from '@/db/schema';
 import { Store } from '@/db/store';
@@ -30,11 +31,19 @@ import { recoverPreparedCheckpoints } from '@/checkpoint/coordinator';
 
 // ── Helpers ──────────────────────────────────────────────────────────
 
-function createStore(configPath?: string): { store: Store; close: () => void } {
+function createStore(configPath?: string): {
+  store: Store;
+  close: () => void;
+  config: EngramConfig;
+} {
   const config = loadConfig(configPath);
   const db = getDatabase(config.database.path);
   initializeSchema(db);
-  return { store: new Store(db), close: () => db.close() };
+  return { store: new Store(db), close: () => db.close(), config };
+}
+
+function resolveScopedProjectPath(config: EngramConfig, rawPath: string): string {
+  return applyProjectAlias(config.storage.projectAliases, rawPath);
 }
 
 function formatBytes(bytes: number): string {
@@ -151,10 +160,10 @@ export function cmdSearch(
   query: string,
   options: { project?: string; allProjects?: boolean; config?: string }
 ): ScoredResult[] {
-  const { store, close } = createStore(options.config);
+  const { store, close, config } = createStore(options.config);
   try {
-    const projectPath = options.project ? path.resolve(options.project) : process.cwd();
-    const config = loadConfig(options.config);
+    const rawProjectPath = options.project ? path.resolve(options.project) : process.cwd();
+    const projectPath = resolveScopedProjectPath(config, rawProjectPath);
 
     // recall hookと同じくconfig.search.projectScopeをデフォルトの挙動として尊重する。
     // --all-projectsが明示されればそれを優先する。
@@ -256,7 +265,7 @@ export function cmdResolutions(
   query: string | undefined,
   options: { project?: string; allProjects?: boolean; config?: string; showEvidence?: boolean }
 ): ReturnType<Store['searchVerifiedResolutions']> {
-  const { store, close } = createStore(options.config);
+  const { store, close, config } = createStore(options.config);
   try {
     const requestedProjectPath = options.project ? path.resolve(options.project) : process.cwd();
     let projectPath: string | undefined;
@@ -266,6 +275,7 @@ export function cmdResolutions(
       } catch {
         projectPath = requestedProjectPath;
       }
+      projectPath = resolveScopedProjectPath(config, projectPath);
     }
     const results = store.searchVerifiedResolutions(query, projectPath);
     if (results.length === 0) {
@@ -347,13 +357,14 @@ export function cmdList(options: {
   allProjects?: boolean;
   config?: string;
 }): Session[] {
-  const { store, close } = createStore(options.config);
+  const { store, close, config } = createStore(options.config);
   try {
     const projectPath = options.allProjects
       ? undefined
-      : options.project
-        ? path.resolve(options.project)
-        : process.cwd();
+      : resolveScopedProjectPath(
+          config,
+          options.project ? path.resolve(options.project) : process.cwd()
+        );
     const sessions = store.getSessionList(projectPath);
 
     if (sessions.length === 0) {
@@ -447,13 +458,14 @@ export function cmdExport(options: {
   config?: string;
 }): string {
   const fmt = options.format ?? 'json';
-  const { store, close } = createStore(options.config);
+  const { store, close, config } = createStore(options.config);
   try {
     const projectPath = options.allProjects
       ? undefined
-      : options.project
-        ? path.resolve(options.project)
-        : process.cwd();
+      : resolveScopedProjectPath(
+          config,
+          options.project ? path.resolve(options.project) : process.cwd()
+        );
     const sessions = store.getSessionList(projectPath);
 
     if (fmt === 'markdown') {
@@ -516,7 +528,9 @@ export function cmdMerge(options: {
     const threshold = options.threshold ? parseFloat(options.threshold) : undefined;
     const result = mergeChunks(db, {
       similarityThreshold: threshold,
-      projectPath: options.project ? path.resolve(options.project) : undefined,
+      projectPath: options.project
+        ? resolveScopedProjectPath(config, path.resolve(options.project))
+        : undefined,
       dryRun: options.dryRun,
     });
 
