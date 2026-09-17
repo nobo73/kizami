@@ -1,3 +1,9 @@
+## [0.7.0](https://github.com/okamyuji/kizami/compare/v0.6.5...v0.7.0) (2026-09-17)
+
+### Features
+
+- **config:** map project paths across hosts via storage.projectAliases ([#30](https://github.com/okamyuji/kizami/issues/30)) ([75934fb](https://github.com/okamyuji/kizami/commit/75934fbb4ceb06a465852384e35c8bf0a3dbe1e7)), closes [#29](https://github.com/okamyuji/kizami/issues/29)
+
 ## [0.6.5](https://github.com/okamyuji/kizami/compare/v0.6.4...v0.6.5) (2026-09-17)
 
 ### Bug Fixes
