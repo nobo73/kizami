@@ -4,6 +4,7 @@ import type { PendingPromptV2, TurnCheckpointCandidate } from '@/checkpoint/type
 import { createTurnKey } from '@/checkpoint/identity';
 import { writePendingPrompt, readPendingPrompts } from '@/checkpoint/state';
 import type { RuntimeAdapter, AdapterExtraction, AdapterEnvironment } from '@/checkpoint/adapter';
+import { applyProjectAlias } from '@/config';
 
 export interface CodexPromptPayload {
   hook_event_name?: string;
@@ -99,7 +100,10 @@ export const codexAdapter: RuntimeAdapter<CodexPromptPayload, CodexStopPayload, 
         runtime: 'codex',
         sessionId: payload.session_id,
         runtimeTurnId: payload.turn_id,
-        projectPath: payload.cwd || process.cwd(),
+        projectPath: applyProjectAlias(
+          env.config.storage.projectAliases,
+          payload.cwd || process.cwd()
+        ),
         prompt: payload.prompt,
         model: payload.model,
         source: {},
@@ -151,7 +155,10 @@ export const codexAdapter: RuntimeAdapter<CodexPromptPayload, CodexStopPayload, 
         : `pending:${matchedPending.pendingKey}`;
 
       const turnKey = createTurnKey('codex', payload.session_id, sourceIdentity);
-      const projectPath = resolveProjectPath(payload.cwd ?? matchedPending.projectPath);
+      const projectPath = applyProjectAlias(
+        env.config.storage.projectAliases,
+        resolveProjectPath(payload.cwd ?? matchedPending.projectPath)
+      );
 
       const obsSequence = env.reserveObservationSequence('codex', payload.session_id);
 
